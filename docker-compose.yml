@@ -13,7 +13,8 @@ services:
 # Accounts are hardcoded to 520 with the idea that nwaku nodes use up to 500 for membership registration and the last 20 are used for ad-hoc testing.
 # The account number and private key pairs of the last 20 accounts can be found in the Register memberships section of the Waku-simulator book.
   foundry:
-    image: ghcr.io/foundry-rs/foundry:nightly-9b73e06e1fe376738b92ae081107620291d50188
+    image: ghcr.io/foundry-rs/foundry:latest
+    user: root
     labels:
       com.centurylinklabs.watchtower.enable: '${WATCHTOWER_ENABLED:-false}'
     ports:
@@ -27,7 +28,8 @@ services:
         --block-time=3
         --chain-id=1234
         --gas-limit=30000000
-        --gas-price=1
+        --gas-price=7
+        --base-fee=7
         --silent
         --config-out=/shared/anvil-config.txt
     volumes:
@@ -93,38 +95,36 @@ services:
       - TOKEN_ADDRESS=${TOKEN_ADDRESS:-0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512}
       - PRIVATE_KEY=${PRIVATE_KEY}
     command:
-      - '/opt/run_nwaku.sh'
+      - '/opt/run_nwaku_loop_register.sh'
     volumes:
-      - ./run_nwaku.sh:/opt/run_nwaku.sh:Z
+      - ./run_nwaku_loop_register.sh:/opt/run_nwaku_loop_register.sh:Z
       - privatekeys-volume:/shared
     init: true
     depends_on:
       contract-repo-deployer:
         condition: service_completed_successfully
-      nwaku-token-init:
-        condition: service_completed_successfully
     networks:
       - simulation
 
-  nwaku-token-init:
-    build:
-      context: ./tools/token-mint-service
-      dockerfile: Dockerfile
-    environment:
-      - RPC_URL=${RPC_URL:-http://foundry:8545}
-      - TOKEN_ADDRESS=${TOKEN_ADDRESS:-0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512}
-      - CONTRACT_ADDRESS=${RLN_CONTRACT_ADDRESS:-0x0165878A594ca255338adfa4d48449f69242Eb8F}
-      - PRIVATE_KEY=${PRIVATE_KEY}
-      - NUM_NWAKU_NODES=${NUM_NWAKU_NODES:-5}
-    deploy:
-      replicas: ${NUM_NWAKU_NODES:-5}
-    volumes:
-      - privatekeys-volume:/shared
-    depends_on:
-      contract-repo-deployer:
-        condition: service_completed_successfully
-    networks:
-      - simulation
+  # nwaku-token-init:
+  #   build:
+  #     context: ./tools/token-mint-service
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - RPC_URL=${RPC_URL:-http://foundry:8545}
+  #     - TOKEN_ADDRESS=${TOKEN_ADDRESS:-0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512}
+  #     - CONTRACT_ADDRESS=${RLN_CONTRACT_ADDRESS:-0x0165878A594ca255338adfa4d48449f69242Eb8F}
+  #     - PRIVATE_KEY=${PRIVATE_KEY}
+  #     - NUM_NWAKU_NODES=${NUM_NWAKU_NODES:-5}
+  #   deploy:
+  #     replicas: ${NUM_NWAKU_NODES:-5}
+  #   volumes:
+  #     - privatekeys-volume:/shared
+  #   depends_on:
+  #     contract-repo-deployer:
+  #       condition: service_completed_successfully
+  #   networks:
+  #     - simulation
       
   rest-traffic:
     build:
