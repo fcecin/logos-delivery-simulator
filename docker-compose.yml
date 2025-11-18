@@ -95,9 +95,9 @@ services:
       - TOKEN_ADDRESS=${TOKEN_ADDRESS:-0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512}
       - PRIVATE_KEY=${PRIVATE_KEY}
     command:
-      - '/opt/run_nwaku_loop_register_one_acc.sh'
+      - '/opt/run_nwaku.sh'
     volumes:
-      - ./run_nwaku_loop_register_one_acc.sh:/opt/run_nwaku_loop_register_one_acc.sh:Z
+      - ./run_nwaku.sh:/opt/run_nwaku.sh:Z
       - privatekeys-volume:/shared
     init: true
     depends_on:

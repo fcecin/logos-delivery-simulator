@@ -90,13 +90,15 @@ get_private_key(){
   fi
 }
 
-if test -f .$RLN_CREDENTIAL_PATH; then
-  echo "$RLN_CREDENTIAL_PATH already exists. Use it instead of creating a new one."
-else
-  private_key="$(get_private_key)"
-  echo "Private key: $private_key"
+private_key="$(get_private_key)"
+echo "Private key: $private_key"
 
-  echo "Generating RLN keystore"
+GENERATE_TIMES=35
+echo "[1] Generating RLN keystore $GENERATE_TIMES time(s)..."
+
+for iteration in $(seq 1 $GENERATE_TIMES); do
+
+  echo "Generating RLN keystore $iteration"
   /usr/bin/wakunode generateRlnKeystore \
     --rln-relay-eth-client-address="$RPC_URL" \
     --rln-relay-eth-private-key=$private_key  \
@@ -107,7 +109,8 @@ else
     --rln-relay-epoch-sec=$RLN_RELAY_EPOCH_SEC \
     --log-level=DEBUG \
     --execute
-fi
+
+done
 
 echo "I am a nwaku node"
 
