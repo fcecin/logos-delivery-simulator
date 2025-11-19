@@ -93,10 +93,9 @@ get_private_key(){
 private_key="$(get_private_key)"
 echo "Private key: $private_key"
 
-GENERATE_TIMES=35
-echo "[1] Generating RLN keystore $GENERATE_TIMES time(s)..."
+echo "[1] Generating RLN keystore $MEMBERSHIPS_TO_GENERATE time(s)..."
 
-for iteration in $(seq 1 $GENERATE_TIMES); do
+for iteration in $(seq 1 $MEMBERSHIPS_TO_GENERATE); do
 
   echo "Generating RLN keystore $iteration"
   /usr/bin/wakunode generateRlnKeystore \
