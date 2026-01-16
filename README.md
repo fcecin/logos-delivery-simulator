@@ -2,6 +2,8 @@
 
 Check 📖 [The Waku Simulator Book](https://waku-org.github.io/waku-simulator/)📖
 
+Also see: [AI_CONTEXT.md](./AI_CONTEXT.md) for a concise, structured overview suitable for AI tools.
+
 ## Quickstart
 
 ```
@@ -28,6 +30,26 @@ Run the following command
 docker compose up -d
 ```
 (tested with Docker Compose version v2.28.1. Notice that we don't support docker compose v1)
+
+### Timed run + log capture (optional helper)
+
+You can run the whole simulation for a fixed duration and automatically collect per-node logs using the Python helper:
+
+```
+python3 tools/run_simulation.py --duration 10m --logs-dir ./logs
+```
+
+Notes:
+- Requires docker compose v2.
+- Creates a timestamped folder under `--logs-dir` with `nwaku-<i>.log` per replica and `bootstrap.log`.
+- The script derives the Compose project name from the repo folder unless `--project-name` or `COMPOSE_PROJECT_NAME` is set.
+- Pass `--no-down` if you want to keep the stack running after log collection.
+
+Analyze existing logs only (no containers started):
+
+```
+python3 tools/run_simulation.py --analyze-only ./logs/run_YYYYmmdd_HHMMSS
+```
 
 ## Warning
 
