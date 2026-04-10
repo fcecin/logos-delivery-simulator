@@ -1,13 +1,15 @@
 # Connect external light node
 
-By using [go-waku-light](https://github.com/alrevuelta/go-waku-light), you can connect one or multiple light clients to the network. This utility can be configured to send messages at a given rate using a given peer as `light-push`. It will register a RLN membership at startup. Bear in mind that it should be configured with the same contract and `user-message-limit` as the waku nodes. You should modify the `lightpush-peer`.
+> **Protocol exercised:** Lightpush + RLN — a resource-restricted client publishes messages through a full [logos-delivery](https://github.com/logos-messaging/logos-delivery) node using the lightpush protocol, with RLN proofs fetched directly from the contract.
+
+By using [go-waku-light](https://github.com/alrevuelta/go-waku-light), you can connect one or multiple light clients to the network. This utility can be configured to send messages at a given rate using a given peer as `light-push`. It will register an RLN membership at startup. Bear in mind that it should be configured with the same contract and `user-message-limit` as the rest of the network. You should modify the `lightpush-peer`.
 
 Note that if you spin up multiple services like this using the same `priv-key` some of the transactions registering the RLN membership may fail due to the nonce being repeated. This can be fixed by using multiple keys or waiting for the registration to be completed before spinning up the next process.
 
 - ⚠️ change `lightpush-peer` to the node you wish. Note that the multiaddress is logged by every peer at startup.
 
 ```jsx
-docker run --network waku-simulator_simulation alrevuelta/go-waku-light:4fabb22 \
+docker run --network logos-delivery-simulator_simulation alrevuelta/go-waku-light:4fabb22 \
 --eth-endpoint=http://foundry:8545 \
 --contract-address=0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 \
 send-messages-loop \
@@ -26,7 +28,7 @@ Note that in some examples, it could be interesting to run multiple instances, e
 
 ```bash
 for i in {1..5}; do
-    docker run --rm --network waku-simulator_simulation alrevuelta/go-waku-light:4fabb22 \
+    docker run --rm --network logos-delivery-simulator_simulation alrevuelta/go-waku-light:4fabb22 \
     --eth-endpoint=http://foundry:8545 \
     --contract-address=0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 \
     send-messages-loop \

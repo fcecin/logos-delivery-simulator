@@ -1,12 +1,13 @@
 # Connect external spam node
 
+> **Protocol exercised:** RLN Relay (spam protection) + gossipsub peer scoring — verifies that nodes exceeding their RLN rate limit are detected and disconnected via peer score.
 
-By using the [nwaku-spammer] (https://github.com/waku-org/nwaku/pull/2821), you can connect a node to the network that spams the other nodes, sending messages exceeding its rate limit. It will register an RLN membership at startup. It should be configured with the same contract and `rln-relay-user-message-limit` as the waku nodes. If a node spams enough for the peer-score to go below the threshold, then the peers will disconnect from the spamming node.
+By using the [nwaku-spammer](https://github.com/waku-org/nwaku/pull/2821) build, you can connect a node to the network that spams the other nodes, sending messages exceeding its rate limit. It will register an RLN membership at startup. It should be configured with the same contract and `rln-relay-user-message-limit` as the rest of the network. If a node spams enough for its gossipsub peer score to drop below the threshold, the other [logos-delivery](https://github.com/logos-messaging/logos-delivery) nodes will disconnect from it.
 
 - ⚠️ change `staticnode` to the node you wish. Note that the multiaddress is logged by every peer at startup.
 
 ```bash
-docker run -it --network waku-simulator_simulation quay.io/wakuorg/nwaku-pr:2821 \
+docker run -it --network logos-delivery-simulator_simulation quay.io/wakuorg/nwaku-pr:2821 \
       --relay=true \
       --rln-relay=true \
       --rln-relay-dynamic=true \
@@ -38,7 +39,7 @@ You can also try to connect multiple spamming nodes, but it might be necessary t
 
 ```bash
 for i in {1..5}; do
-docker run -it --network waku-simulator_simulation quay.io/wakuorg/nwaku-pr:2821 \
+docker run -it --network logos-delivery-simulator_simulation quay.io/wakuorg/nwaku-pr:2821 \
       --relay=true \
       --rln-relay=true \
       --rln-relay-dynamic=true \
@@ -61,7 +62,7 @@ done
 The spammer node also provides a method to test burst messaging. It will send the total user-message-limit of messages sequentially without pauses, then rests for the epoch period and repeats.
 
 ```bash
-docker run -it --network waku-simulator_simulation quay.io/wakuorg/nwaku-pr:2821 \
+docker run -it --network logos-delivery-simulator_simulation quay.io/wakuorg/nwaku-pr:2821 \
       --relay=true \
       --rln-relay=true \
       --rln-relay-dynamic=true \
