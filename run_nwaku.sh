@@ -150,4 +150,6 @@ exec /usr/bin/wakunode\
       --discv5-bootstrap-node=${BOOTSTRAP_ENR}\
       --nat=extip:${IP}\
       --shard=0\
-      --cluster-id=66
+      --cluster-id=66\
+      --quic-support=true\
+      --quic-port=9090

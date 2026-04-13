@@ -131,7 +131,7 @@ services:
       context: ./tools/rest-traffic
       dockerfile: Dockerfile
     command:
-      --multiple-nodes=http://logos-delivery-simulator_nwaku_[1..${NUM_LD_NODES:-5}]:8645
+      --multiple-nodes=http://logos-delivery-simulator-nwaku-[1..${NUM_LD_NODES:-5}]:8645
       --msg-size-kbytes=${MSG_SIZE_KBYTES:-10}
       --delay-seconds=${TRAFFIC_DELAY_SECONDS:-15}
     networks:

@@ -17,4 +17,6 @@ exec /usr/bin/wakunode\
       --metrics-server-address=0.0.0.0\
       --nodekey=30348dd51465150e04a5d9d932c72864c8967f806cce60b5d26afeca1e77eb68\
       --nat=extip:${IP}\
-      --cluster-id=66
+      --cluster-id=66\
+      --quic-support=true\
+      --quic-port=9090

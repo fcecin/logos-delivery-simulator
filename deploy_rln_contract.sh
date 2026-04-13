@@ -10,7 +10,7 @@ npm install -g pnpm
 
 # 2. Clone and build the repository
 if [ ! -d "waku-rlnv2-contract" ]; then
-    git clone https://github.com/waku-org/waku-rlnv2-contract.git
+    git clone https://github.com/fcecin/logos-delivery-rlnv2-contract.git waku-rlnv2-contract
 fi
 
 if [ -z "$RLN_CONTRACT_REPO_COMMIT" ]; then
